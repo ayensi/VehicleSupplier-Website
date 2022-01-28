@@ -1,0 +1,296 @@
+﻿@using OtoGaleri.Data.DataModel
+@using PagedList
+@using PagedList.Mvc
+@model ViewModel
+@{
+    ViewBag.Title = "BuyAndRent";
+    Layout = "~/Views/_Layout.cshtml";
+    int id = 0;
+    if (Session["ClientId"] == null)
+    {
+        Response.Redirect("/Home/Index/");
+    }
+    else
+    {
+        id = Convert.ToInt32(Session["ClientId"].ToString());
+    }
+
+
+}
+<head>
+    <link href="~/Content-UI/css/filter.css" rel="stylesheet" />
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</head>
+
+<label style="margin-left:10%;margin-top:50px" id="scrollHere" class="switcher">
+    <input type="checkbox" id="filtercheck" />
+    <div class="switcher__indicator"></div><span>Filtreler</span>
+</label>
+<br />
+<br />
+
+<div id="filters" style=";margin-left:8.5%;display:none">
+    <div style="float:left; margin-left:100px;" class="select">
+        <select name="categoryselect" class="standard-select" style="margin:auto" id="categoryselect">
+            <option selected disabled value="defaultcategory">Seçin:</option>
+            @foreach (var item in Model.Categories)
+            {
+                <option value="@item.category_id">@item.category_name</option>
+            }
+        </select>
+    </div>
+    <div style="float:left; margin-left:100px;" class="select">
+        <select name="brandselect" style="margin:auto" id="brandselect">
+            <option selected disabled value="defaultbrand">Seçin:</option>
+            @foreach (var item in Model.Brands)
+            {
+                <option value="@item.brand_id">@item.brand_name</option>
+            }
+        </select>
+    </div>
+    <div style="float:left; margin-left:100px;" class="select">
+        <select name="fuelselect" style="margin:auto" id="fuelselect">
+            <option selected disabled value="defaultfuel">Seçin:</option>
+            @foreach (var item in Model.FuelOptions)
+            {
+                <option value="@item.fueloption_id">@item.fueloption_name</option>
+            }
+        </select>
+    </div>
+    <div style="float:left; margin-left:100px;" class="select">
+        <select name="gearselect" style="margin:auto" id="gearselect">
+            <option selected disabled value="defaultgear">Seçin:</option>
+            @foreach (var item in Model.GearOptions)
+            {
+                <option value="@item.gearoption_id">@item.gearoption_name</option>
+            }
+        </select>
+    </div><div style="float:left; margin-left:100px;" class="select">
+        <select name="motorselect" style="margin:auto" id="motorselect">
+            <option value="defaultmotor">Seçin:</option>
+            @foreach (var item in Model.MotorOptions)
+            {
+                <option value="@item.motoroption_id">@item.motoroption_name</option>
+            }
+        </select>
+    </div>
+    <div style="float:left; margin-left:100px;" class="select">
+        <select name="rentselect" style="margin:auto" id="rentselect">
+            <option value="defaultrent">Seçin:</option>
+            <option value="true" id="rentable">Kiralık</option>
+            <option value="false" id="onlysale">Satılık</option>
+        </select>
+    </div>
+    <div style="float:left; margin-left:100px;" class="select">
+        <select name="usedselect" style="margin:auto" id="usedselect">
+            <option value="defaultrent">Seçin:</option>
+            <option value="false" id="notused">Sıfır</option>
+            <option value="true" id="used">İkinci El</option>
+        </select>
+    </div>
+</div>
+<br>
+<div id="accordion" style="margin-left:8.5%">
+
+    @if (TempData["NoProduct"] != null)
+    {
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            <strong>Hata!</strong> @TempData["NoProduct"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
+    @foreach (var item in Model.Models)
+    {
+
+        <div id="@item.model_id" class="flip-card-container" style="--hue: 220;float:left">
+            <div class="flip-card">
+                <div class="card-front">
+                    <figure>
+                        <div class="img-bg"></div>
+                        <img src="@item.model_image" alt="@item.model_name">
+                        <figcaption>@item.Brand.brand_name</figcaption>
+                    </figure>
+
+                    <ul>
+                        <li>@item.model_name</li>
+                        <li>@item.Color.color_name</li>
+                        <li>@item.FuelOption.fueloption_name</li>
+                        <li>@item.GearOption.gearoption_name</li>
+                        <li>@item.MotorOption.motoroption_name</li>
+                        @if (item.model_isUsed)
+                        {
+                            <li>İkinci El</li>
+                            <li>@item.model_km.ToString("##,#") KM</li>
+                        }
+                        @if (item.model_isRentable)
+                        {
+                            <li>
+                                Kiralanabilir
+                            </li>
+                        }
+                        <li>₺@item.model_price.ToString("##,#")</li>
+                    </ul>
+                </div>
+
+                <div class="card-back">
+                    <figure>
+                        <div class="img-bg"></div>
+                        <img src="@item.model_image" alt="@item.model_name">
+                    </figure>
+
+                    <button id="@item.model_id" class="sendtocart">Satın Al / Kirala</button>
+
+                    <div class="design-container">
+                        <span class="design design--1"></span>
+                        <span class="design design--2"></span>
+                        <span class="design design--3"></span>
+                        <span class="design design--4"></span>
+                        <span class="design design--5"></span>
+                        <span class="design design--6"></span>
+                        <span class="design design--7"></span>
+                        <span class="design design--8"></span>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    }
+
+    <input type="hidden" id="clientid" value="@id">
+</div>
+
+@*FILTER CHECK DIV*@
+<script>
+    $('#filtercheck').click(function () {
+        if ($('#filtercheck').is(':checked')) {
+            $('#filters').css('display', 'block');
+
+        }
+        else {
+            $('#filters').css('display', 'none');
+        }
+    });
+</script>
+<script>
+    var elem = $('#scrollHere');
+    if (elem) {
+        $('html').scrollTop(elem.offset().top);
+        $('html').scrollLeft(elem.offset().left);
+    }
+</script>
+@*
+    FILTERING THE QUERIES
+*@
+<script>
+    $('select').change(function () {
+        $.ajax({
+            type: "POST",
+            url: '/Product/FilterQuery',
+            data: {
+                'categoryid': $('#categoryselect option:selected').val(),
+                'brandid': $('#brandselect option:selected').val(),
+                'fuelid': $('#fuelselect option:selected').val(),
+                'motorid': $('#motorselect option:selected').val(),
+                'gearid': $('#gearselect option:selected').val(),
+                'isrentable': $('#rentselect option:selected').val(),
+                'isused': $('#usedselect option:selected').val()
+            },
+            success: function (response) {
+                $('.flip-card-container').hide();
+                var sayac = 0;
+                $.each(response, function (i, model) {
+                    for (var i in model) {
+                        $('.flip-card-container').each(function () {
+                            if (model[i].model_id == this.id) {
+                                $('#' + model[i].model_id).toggle();
+                                sayac++;
+                            }
+                        });
+                    }
+
+                });
+                if (sayac == 0) {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Hata...',
+                        text: 'Bu filtrelemeye uyan model bulunamadı...',
+                    })
+                    $('.flip-card-container').show();
+                    $('html').scrollTop($('#scrollHere').offset().top);
+                    $('html').scrollLeft($('#scrollHere').offset().left);
+                }
+                return false;
+            },
+            error: function (response) {
+
+                console.log(response);
+                return false;
+            }
+        });
+    })
+</script>
+<script>
+    $('.sendtocart').on('click', function () {
+        var modelid = this.id;
+        var clientid = $('#clientid').val();
+        $.ajax({
+            type: 'POST',
+            url: '/Product/CheckForClientInfo',
+            data: {
+                'clientid': clientid
+            },
+            success: function (response) {
+                if (!response.errormessage) {
+                    Swal.fire({
+                        title: 'Emin misiniz?',
+                        text: "Bu ürünü sepete göndermek üzeresiniz.",
+                        icon: 'info',
+                        showCancelButton: true,
+                        confirmButtonColor: '#3085d6',
+                        cancelButtonColor: '#d33',
+                        confirmButtonText: 'Sepete ekle'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+
+                            $.ajax({
+                                type: 'POST',
+                                url: '/Product/SendToCart',
+                                data: {
+                                    'model_id': modelid
+                                },
+                                success: function (response) {
+                                    Swal.fire(
+                                        'Eklendi!',
+                                        'Ürün sepetinize eklendi, satın alabilirsiniz.',
+                                        'success'
+
+                                    )
+                                    setTimeout(function () {
+                                        window.location.href = "/Product/Cart/";
+                                    }, 1000);
+                                },
+                                error: function (response) {
+                                    Swal.fire({
+                                        icon: 'error',
+                                        title: 'Hata...',
+                                        text: 'Ürün sepetinize eklenemedi...',
+                                    })
+                                }
+
+
+                            });
+                        }
+                    })
+                }
+                else {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Hata...',
+                        text: response.errormessage,
+                    })
+                }
+            }
+        });
+
+    });
+</script>

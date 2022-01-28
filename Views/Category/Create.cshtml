@@ -1,0 +1,28 @@
+﻿@model OtoGaleri.Data.DataModel.Category
+@{
+    Layout = "~/Views/_AdminLayout.cshtml";
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Create</title>
+    <link href="~/Content-UI/css/createstyle.css" rel="stylesheet" />
+</head>
+<body>
+    <div style="z-index:-1" class="form">
+        <div class="subtitle">Kategori Oluştur</div>
+        @using (Html.BeginForm("Create", "Category", FormMethod.Post))
+        {
+    <div style="z-index:-0" class="input-container ic1">
+        @Html.LabelFor(x=>x.category_name,"Kategori İsmi")
+        @Html.TextBoxFor(x=> x.category_name)
+        <div class="cut"></div>
+    </div>
+            <button type="submit">Kaydet</button>
+        }
+    </div>
+</body>
+</html>

@@ -1,0 +1,504 @@
+﻿@using OtoGaleri.Data.DataModel
+@model ViewModel
+@{
+    ViewBag.Title = "Client";
+    Layout = "~/Views/_Layout.cshtml";
+    int id = 0;
+    if (Session["ClientId"] == null)
+    {
+        Response.Redirect("/Home/Index/");
+    }
+    else
+    {
+        id = Convert.ToInt32(Session["ClientId"].ToString());
+    }
+}
+<head>
+    <link href="~/Content-UI/css/clientmenu.css" rel="stylesheet" />
+    <link href="~/Content-UI/css/table.css" rel="stylesheet" />
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+</head>
+
+<div style="width:200px" id="scrollHere" class="container">
+    <div onclick="orderFunc();" class="link">
+        <div class="text"><i class="fa fa-shopping-cart" aria-hidden="true"></i>Siparişlerim</div>
+    </div>
+    <div onclick="addressFunc();" id="addressdiv" class="link">
+        <div class="text">
+            <i class="fa fa-map-marker" aria-hidden="true"></i>
+            Adresim
+        </div>
+    </div>
+    <div onclick="notificationFunc();" id="notificationdiv" class="link">
+        <div class="text">
+            <i class="fa fa-bell" aria-hidden="true"></i>
+            Bildirimler
+        </div>
+    </div>
+    <div onclick="personalFunc();" id="personaldiv" class="link">
+        <div class="text"><i class="fa fa-user" aria-hidden="true"></i> Kişisel Bilgilerim</div>
+    </div>
+    <div onclick="logoutFunc();"id="logoutdiv" class="link">
+        <div class="text">
+            <i class="fa fa-sign-out" aria-hidden="true"></i>
+            Çıkış Yap
+        </div>
+    </div>
+</div>
+<div id="sections" class="container" style="display:none;">
+    <div onclick="orderFunc();" style="display:none" id="orders">
+        <table class="fl-table">
+            <thead>
+                <tr>
+                    <th>Sipariş Numarası</th>
+                    <th>Model</th>
+                    <th>İsim</th>
+                    <th>Sipariş Tarihi</th>
+                    <th>Fiyat</th>
+                    <th>Kiralık</th>
+                    <th>Kiralıksa KM</th>
+                    <th>Kiralıksa Alış Tarihi</th>
+                    <th>Kiralıksa İade Tarihi</th>
+                </tr>
+            </thead>
+            <tbody>
+                @{
+                    if (Model.Order != null)
+                    {
+                        foreach (var item in Model.Order)
+                        {
+                            <tr>
+                                <td>
+                                    @item.order_number
+                                </td>
+                                <td>@item.Model.model_name</td>
+                                <td>@item.Client.client_name&emsp;@item.Client.client_lastname</td>
+                                <td>@item.order_date.ToString("dd,MM,yyyy")</td>
+                                <td>₺@item.order_price.ToString("#0,00")</td>
+                                @if (item.order_isRental)
+                                {
+                                    <td>Evet</td>
+                                    <td>@item.Model.model_km.ToString("0.00") KM</td>
+                                    <td>@item.order_pickupDate</td>
+                                    <td>@item.order_returnDate</td>
+                                }
+                                else
+                                {
+                                    <td>Hayır</td>
+                                }
+
+
+                            </tr>
+                        }
+                    }
+                }
+
+            <tbody>
+        </table>
+    </div>
+    <div onclick="addressFunc();" style="display:none" id="addresses">
+
+        <div style="margin:auto">
+            <form id="serializer">
+                <table class="fl-table">
+                    <thead>
+                        <tr>
+                            <th>Şehir</th>
+                            <th>İlçe</th>
+                            <th>Mahalle</th>
+                            <th>Sokak/Cadde</th>
+                            <th>Bina Numarası</th>
+                            <th>Daire Numarası</th>
+                            <th>Adres Tarifi</th>
+
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>
+                                @Html.TextBox("clientaddress_cityname")
+                            </td>
+                            <td>
+                                @Html.TextBox("clientaddress_districtname")
+                            </td>
+                            <td>
+                                @Html.TextBox("clientaddress_neighborhoodname")
+                            </td>
+                            <td>
+                                @Html.TextBox("clientaddress_streetname")
+                            </td>
+                            <td>
+                                @Html.TextBox("clientaddress_buildingnumber")
+                            </td>
+                            <td>
+                                @Html.TextBox("clientaddress_apartmentnumber")
+                            </td>
+                            <td>
+                                @Html.TextArea("clientaddress_addressdescription")
+                            </td>
+
+                            @Html.Hidden("client_id", value: id)
+                        </tr>
+
+
+                    <tbody>
+                </table>
+
+
+            </form>
+        </div>
+        <br />
+        <div>
+            <button id="addresssendbutton" class="btn btn-light">Kaydet</button>
+        </div>
+        <br />
+        <div>
+            <div style="margin:auto">
+                <table class="fl-table">
+                    <thead>
+                        <tr>
+                            <th>Şehir</th>
+                            <th>İlçe</th>
+                            <th>Mahalle</th>
+                            <th>Sokak/Cadde</th>
+                            <th>Bina Numarası</th>
+                            <th>Daire Numarası</th>
+                            <th>Adres Tarifi</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @{
+                            foreach (var item in Model.ClientAddress)
+                            {
+                                <tr>
+                                    <td>
+                                        @item.clientaddress_cityname
+                                    </td>
+                                    <td>
+                                        @item.clientaddress_districtname
+                                    </td>
+                                    <td>
+                                        @item.clientaddress_neighborhoodname
+                                    </td>
+                                    <td>
+                                        @item.clientaddress_streetname
+                                    </td>
+                                    <td>
+                                        @item.clientaddress_buildingnumber
+                                    </td>
+                                    <td>
+                                        @item.clientaddress_apartmentnumber
+                                    </td>
+                                    <td>
+                                        @item.clientaddress_addressdescription
+                                    </td>
+
+
+
+
+                                </tr>
+                            }
+                        }
+
+                    <tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div onclick="notificationFunc();" style="display:none" id="notifications">
+        NOTIFICATIONS
+    </div>
+    <div onclick="personalFunc();" style="display:none;" id="personals">
+        <div style="margin:auto">
+            <form id="personalserializer">
+                <table class="fl-table">
+                    <thead>
+                        <tr>
+                            <th>İsim</th>
+                            <th>Soyisim</th>
+                            <th>Kimlik Numarası</th>
+                            <th>Telefon Numarası</th>
+
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>
+                                @Html.TextBox("client_name")
+                            </td>
+                            <td>
+                                @Html.TextBox("client_lastname")
+                            </td>
+                            <td>
+                                @Html.TextBox("client_identity_number")
+                            </td>
+                            <td>
+                                @Html.TextBox("client_phone")
+                            </td>
+
+                            @Html.Hidden("client_id", value: id)
+                        </tr>
+
+
+                    <tbody>
+                </table>
+            </form>
+        </div>
+        <br />
+        <div>
+            <button id="personalsave" class="btn btn-light">Kaydet</button>
+        </div>
+        <br />
+        <div>
+            <table class="fl-table">
+                <thead>
+                    <tr>
+                        <th>İsim</th>
+                        <th>Soyisim</th>
+                        <th>Kimlik Numarası</th>
+                        <th>Telefon Numarası</th>
+
+                    </tr>
+                </thead>
+                <tbody>
+                    @{
+                        foreach (var item in Model.Client)
+                        {
+                            <tr>
+                                <td>
+                                    @item.client_name
+                                </td>
+                                <td>
+                                    @item.client_lastname
+                                </td>
+                                <td>
+                                    @item.client_identity_number
+                                </td>
+                                <td>
+                                    @item.client_phone
+                                </td>
+
+                            </tr>
+                        }
+                    }
+
+                <tbody>
+            </table>
+        </div>
+    </div>
+</div>
+@*
+    DIV CLICK
+*@
+<script>
+    function orderFunc() {
+        $('#sections').css('display', 'block');
+        $('#orders').css('display', 'block');
+        var elem = $('#orders');
+        if (elem) {
+            $('html').scrollTop(elem.offset().top);
+            $('html').scrollLeft(elem.offset().left);
+        }
+        $('#addresses').css('display', 'none');
+        $('#notifications').css('display', 'none');
+        $('#personals').css('display', 'none');
+
+    }
+    function addressFunc() {
+        $('#sections').css('display', 'block');
+        $('#addresses').css('display', 'block');
+        var elem = $('#addresses');
+        if (elem) {
+            $('html').scrollTop(elem.offset().top);
+            $('html').scrollLeft(elem.offset().left);
+        }
+        $('#orders').css('display', 'none');
+        $('#notifications').css('display', 'none');
+        $('#personals').css('display', 'none');
+    }
+    function notificationFunc() {
+        $('#sections').css('display', 'block');
+        $('#notifications').css('display', 'block');
+        var elem = $('#notifications');
+        if (elem) {
+            $('html').scrollTop(elem.offset().top);
+            $('html').scrollLeft(elem.offset().left);
+        }
+        $('#orders').css('display', 'none');
+        $('#addresses').css('display', 'none');
+        $('#personals').css('display', 'none');
+    }
+    function personalFunc() {
+        $('#sections').css('display', 'block');
+        $('#personals').css('display', 'block');
+        var elem = $('#personals');
+        if (elem) {
+            $('html').scrollTop(elem.offset().top);
+            $('html').scrollLeft(elem.offset().left);
+        }
+        $('#orders').css('display', 'none');
+        $('#addresses').css('display', 'none');
+        $('#notifications').css('display', 'none');
+    }
+    function logoutFunc() {
+        Swal.fire({
+            title: 'Emin misiniz?',
+            text: "Çıkış yapmak istiyor musunuz?",
+            icon: 'info',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Çıkış'
+        }).then((result) => {
+            if (result.isConfirmed) {
+
+                $.ajax({
+                    type: "POST",
+                    url: '/Home/Logout',
+                    dataType: "json",
+                    data: {
+                    },
+                    success: function (response) {
+                        Swal.fire(
+                            'Çıkış yapıldı!',
+                            'Yönlendiriliyorsunuz...',
+                            'success'
+
+                        )
+                        setTimeout(function () {
+                            window.location.href = "/Home/Client/";
+                        }, 1000);
+                    }
+
+
+                });
+
+            }
+        })
+    }
+</script>
+<script>
+    var elem = $('#scrollHere');
+    if (elem) {
+        $('html').scrollTop(elem.offset().top);
+        $('html').scrollLeft(elem.offset().left);
+    }
+</script>
+@*
+    SAVING THE PERSONAL INFO
+*@
+<script>
+    $('#personalsave').on('click', function () {
+        var valdata = $("#personalserializer").serialize();
+        $.ajax({
+            type: 'POST',
+            url: '/Home/SavePersonalInfo',
+            data: valdata,
+            success: function (response) {
+                var data = response;
+                if (!data.errormessage) {
+
+                    Swal.fire({
+                        position: 'top-end',
+                        icon: 'success',
+                        title: 'Kişisel bilgileriniz kaydedildi...',
+                        showConfirmButton: false,
+                        timer: 1500
+                    })
+                    setTimeout(function () {
+                        window.location.href = "/Home/Client/";
+                    }, 1500);
+                }
+                else {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Hata...',
+                        text: response.errormessage,
+                    })
+                }
+
+            }
+        });
+    });
+</script>
+@*
+    SAVING THE ADDRESS
+*@
+<script>
+    $('#addresssendbutton').on('click', function () {
+        var valdata = $("#serializer").serialize();
+        console.log(valdata);
+        $.ajax({
+            type: 'POST',
+            url: '/Home/SaveClientAddress',
+            data: valdata,
+            success: function (response) {
+                var data = response;
+                console.log(data);
+                console.log(data.errormessage);
+                if (!data.errormessage) {
+
+                    Swal.fire({
+                        position: 'top-end',
+                        icon: 'success',
+                        title: 'Adresiniz kaydedildi...',
+                        showConfirmButton: false,
+                        timer: 1500
+                    })
+                    setTimeout(function () {
+                        window.location.href = "/Home/Client/";
+
+                    }, 1500);
+                }
+                else {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Hata...',
+                        text: response.errormessage,
+                    })
+                }
+
+            }
+        });
+    });
+</script>
+@*
+    DELETING THE ADDRESS
+*@
+<script>
+    $('#deleteAddress').on('click', function () {
+
+        Swal.fire({
+            title: 'Emin misiniz?',
+            text: "Bu adresi silmek üzeresiniz.",
+            icon: 'info',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Adresi sil'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                $.ajax({
+                    type: 'POST',
+                    url: '/Home/DeleteAddress',
+                    data: {
+                        'clientid': $('#clientid').val()
+                    },
+                    success: function (response) {
+                        Swal.fire({
+                            position: 'top-end',
+                            icon: 'success',
+                            title: 'Adresiniz silindi...',
+                            showConfirmButton: false,
+                            timer: 1500
+                        })
+                    }
+                });
+            }
+        })
+
+
+    });
+</script>

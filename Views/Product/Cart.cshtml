@@ -1,0 +1,256 @@
+﻿@using OtoGaleri.Data.DataModel
+@model ViewModel
+@{
+    ViewBag.Title = "Cart";
+    Layout = "~/Views/_Layout.cshtml";
+    int id = 0;
+    if (Session["ClientId"] == null)
+    {
+        Response.Redirect("/Home/Index/");
+    }
+    else
+    {
+        id = Convert.ToInt32(Session["ClientId"].ToString());
+    }
+
+
+}
+@if (Model.Models.Count != 0)
+{
+    foreach (var item in Model.Models)
+    {
+        <div style="margin-bottom:100px;background-color:#f1f1f1" id="scrollHere" class="d-flex justify-content-center container mt-5">
+            <div class="card p-3 bg-white">
+                <i class="fa fa-car"></i>
+                <div class="about-product text-center mt-2">
+                    <img style="border-radius:50px" src="@item.model_image" width="300">
+                    <div>
+                        <h4>@item.model_name</h4>
+                        <h6 class="mt-0 text-black-50">@item.model_description</h6>
+                    </div>
+                </div>
+                <input type="hidden" id="productprice" value="@item.model_price" />
+                <input type="hidden" id="productid" value="@item.model_id" />
+                <input type="hidden" id="clientid" value="@id" />
+                <div class="stats mt-2">
+                    <div class="d-flex justify-content-between p-price"><span>Marka</span><span>@item.Brand.brand_name</span></div>
+                    @if (item.model_isUsed)
+                    {
+                        <div class="d-flex justify-content-between p-price"><span>Sıfır/İkinci El</span><span>İkinci El</span></div>
+                        <div class="d-flex justify-content-between p-price"><span>Kilometre</span><span>@item.model_km.ToString("##,#") KM</span></div>
+                    }
+                    else
+                    {
+                        <div class="d-flex justify-content-between p-price"><span>Sıfır/İkinci El</span><span>Sıfır</span></div>
+                    }
+                    @if (item.model_isRentable)
+                    {
+                        <div class="d-flex justify-content-between p-price"><span>Kiralanabilir</span><span>Evet</span></div>
+                    }
+                    else
+                    {
+                        <div class="d-flex justify-content-between p-price"><span>Kiralanabilir</span><span>Hayır</span></div>
+                    }
+                    <div class="d-flex justify-content-between p-price"><span>Renk</span><span>@item.Color.color_name</span></div>
+                    <div class="d-flex justify-content-between p-price"><span>Yakıt</span><span>@item.FuelOption.fueloption_name</span></div>
+                    <div class="d-flex justify-content-between p-price"><span>Motor Gücü</span><span>@item.MotorOption.motoroption_name</span></div>
+                    <div class="d-flex justify-content-between p-price"><span>Vites</span><span>@item.GearOption.gearoption_name</span></div>
+
+                </div>
+                <div class="d-flex justify-content-between total font-weight-bold mt-4"><span>Toplam</span><span>₺@item.model_price.ToString("##,#")</span></div>
+                <br />
+                @if (item.model_isRentable)
+                {
+                    <label>Araç Sigortası</label>
+                    <input style="float:left" type="checkbox" id="assurance" />
+                    <br />
+                    <span>Alış tarihi</span>
+                    <input type="date" id="pickDay" name="pickDay">
+                    <span>İade tarihi</span>
+                    <input type="date" id="returnDay" name="bringDay">
+                    <br />
+                    <div class="d-flex justify-content-between total font-weight-bold mt-4"><span>Kiralama Fiyatı</span><span id="rentprice"></span></div>
+                    <div class="d-flex justify-content-between total font-weight-bold mt-4"><span>Günlük Kiralama Fiyatı</span><span id="dailyrentprice"></span></div>
+                    <br>
+                    <button class="btn btn-danger" id="rentpricecalculate">Kiralık Fiyat Hesapla</button>
+                    <br />
+                    <br />
+                    <button class="btn btn-dark" id="rent">Kirala</button>
+                    <button class="btn btn-primary" id="buy">Satın Al</button>
+                }
+                else
+                {
+                    <button class="btn btn-primary" id="buy">Satın Al</button>
+                }
+            </div>
+        </div>
+
+
+    }
+}
+else
+{
+    <div style="margin-bottom:200px;background-color:#f1f1f1" id="scrollHere" class="d-flex justify-content-center container mt-5">
+        <div class="card p-3 bg-white">
+            <i class="fa fa-car"></i>
+            <div class="about-product text-center mt-2">
+                <img src="~/Content-UI/img/noproduct.png" width="300">
+                <div>
+                    <h4>Boş!</h4>
+                    <h6 class="mt-0 text-black-50">Sepetinizde ürün yok!</h6>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+<script>
+    var elem = $('#scrollHere');
+    if (elem) {
+        $('html').scrollTop(elem.offset().top);
+        $('html').scrollLeft(elem.offset().left);
+    }
+</script>
+@*
+    RENTING PRICE CALCULATE
+*@
+<script>
+    $(function () {
+        var start;
+        var end;
+        var days;
+        var dailyPrice;
+        //RENT PRICE CALCULATE
+
+        $('#rentpricecalculate').on('click', function () {
+            if ($('#pickDay').val() && $('#returnDay').val()) {
+                start = $('#pickDay').val();
+                end = $('#returnDay').val();
+
+
+                // get days
+                days = Math.floor((Date.parse(end) - Date.parse(start)) / 86400000);
+
+                dailyPrice = ($('#productprice').val() * 0.1) / 100;
+                dailyPrice = dailyPrice + (dailyPrice * 40 / 100);
+                dailyPrice = dailyPrice + (dailyPrice * 18 / 100);
+                if ($('#assurance').is(":checked")) {
+                    dailyPrice = dailyPrice + ($('#productprice').val() * 15 / 100 / 365);
+                }
+
+                $("#dailyrentprice").text('₺' + (dailyPrice).toLocaleString(undefined, {
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2
+                }));
+                $("#rentprice").text('₺' + (dailyPrice * days).toLocaleString(undefined, {
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2
+                }));
+                console.log(start);
+                console.log(end);
+                console.log(days);
+
+            }
+        });
+
+        //RENT POST
+
+        $('#rent').on('click', function () {
+            var rentprice = (dailyPrice * days);
+            if (rentprice) {
+                Swal.fire({
+                    title: 'Emin misiniz?',
+                    text: "Bu ürünü kiralamak üzeresiniz.",
+                    icon: 'info',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Öde'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+
+                        $.ajax({
+                            type: "POST",
+                            url: '/Product/OrderRental',
+                            dataType: "json",
+                            data: {
+                                'modelid': $('#productid').val(),
+                                'clientid': $('#clientid').val(),
+                                'daycount': days,
+                                'pickupdate': start,
+                                'returndate': end,
+                                'rent_price': rentprice
+                            },
+                            success: function (response) {
+                                Swal.fire(
+                                    'Eklendi!',
+                                    'Siparişiniz alındı!',
+                                    'success'
+
+                                )
+                                setTimeout(function () {
+                                    window.location.href = "/Home/Client/";
+                                }, 1000);
+                            }
+
+
+                        });
+
+                    }
+                })
+
+
+            }
+            else {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Hata...',
+                    text: 'Önce fiyat hesaplamanısını yapmanız gerekiyor...',
+                })
+            }
+        });
+
+        //BUY POST
+
+        $('#buy').on('click', function () {
+            Swal.fire({
+                title: 'Emin misiniz?',
+                text: "Bu ürünü satın almak üzeresiniz.",
+                icon: 'info',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Öde'
+            }).then((result) => {
+                if (result.isConfirmed) {
+
+                    $.ajax({
+                        type: "POST",
+                        url: '/Product/OrderBuy',
+                        dataType: "json",
+                        data: {
+                            'modelid': $('#productid').val(),
+                            'clientid': $('#clientid').val(),
+                        },
+                        success: function (response) {
+                            Swal.fire(
+                                'Eklendi!',
+                                'Siparişiniz alındı!',
+                                'success'
+                            )
+                            setTimeout(function () {
+                                window.location.href = "/Home/Client/";
+                            }, 1000);
+                        }
+
+
+                    });
+
+                }
+            });
+
+        });
+
+    });
+
+</script>

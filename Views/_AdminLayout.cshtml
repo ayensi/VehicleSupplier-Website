@@ -1,0 +1,114 @@
+﻿
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.min.js" integrity="undefined" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js" integrity="undefined" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.esm.min.js" integrity="undefined" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" integrity="undefined" crossorigin="anonymous">
+    <link href="~/Content-UI/css/navadmin.css" rel=" stylesheet" />
+    <meta name="viewport" content="width=device-width" />
+    <title>_AdminLayout</title>
+
+    @*<link href="https://fonts.googleapis.com/css2?family=Rozha+One&display=swap" rel="stylesheet">*@
+
+
+
+
+</head>
+
+<body>
+  
+    <header style="z-index:1">
+        
+        <input type="checkbox" id="burger-toggle">
+        <label for="burger-toggle" class="burger-menu">
+            <div class="line"></div>
+            <div class="line"></div>
+            <div class="line"></div>
+        </label>
+        <div class="menu">
+            <div class="menu-inner">
+                <ul class="menu-nav">
+                    <li class="menu-nav-item">
+                        <a class="menu-nav-link" href="/Order/Index">
+                            <span>
+                                <div>Siparişler</div>
+                            </span>
+                        </a>
+                    </li>
+                    &emsp;
+                    <li class="menu-nav-item">
+                        <a class="menu-nav-link" href="/Client/Index">
+                            <span>
+                                <div>Müşteriler</div>
+                            </span>
+                        </a>
+                    </li>&emsp;
+                    <li class="menu-nav-item">
+                        <a class="menu-nav-link" href="/Model/Index">
+                            <span>
+                                <div>Araçlar</div>
+                            </span>
+                        </a>
+                    </li>&emsp;
+                    <li class="menu-nav-item">
+                        <a class="menu-nav-link" href="/Brand/Index">
+                            <span>
+                                <div>Markalar</div>
+                            </span>
+                        </a>
+                    </li>&emsp;
+                    <li class="menu-nav-item">
+                        <a class="menu-nav-link" href="/Category/Index">
+                            <span>
+                                <div>Kategoriler</div>
+                            </span>
+                        </a>
+                    </li>&emsp;
+                    <li class="menu-nav-item">
+                        <a class="menu-nav-link" href="/Support/Index">
+                            <span>
+                                <div>Destek</div>
+                            </span>
+                        </a>
+                    </li>
+
+                </ul>
+            </div>
+        </div>
+
+    </header>
+
+
+
+    <main>
+        @if (TempData["SuccessAdminLayout"] != null)
+        {
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            <strong>Başarılı!</strong> @TempData["SuccessAdminLayout"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        }
+        @if (TempData["ErrorAdminLayout"] != null)
+        {
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        <strong>Hata!</strong> @TempData["ErrorAdminLayout"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+        }
+        @RenderBody()
+    </main>
+
+    <footer>
+    </footer>
+
+</body>
+</html>

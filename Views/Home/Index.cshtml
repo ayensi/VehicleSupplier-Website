@@ -1,0 +1,298 @@
+﻿@model OtoGaleri.Data.DataModel.Client
+@{
+    ViewBag.Title = "Index";
+    Layout = null;
+    int clientid = 0;
+    if (Session["ClientId"] != null)
+    {
+        clientid = Convert.ToInt32(Session["ClientId"].ToString());
+    }
+
+}
+<head>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.esm.min.js"></script> 
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://kit.fontawesome.com/628c8d2499.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/webfont/1.6.26/webfont.js"></script>
+    <script>document.documentElement.className = "js"; var supportsCssVars = function () { var e, t = document.createElement("style"); return t.innerHTML = "root: { --tmp-var: bold; }", document.head.appendChild(t), e = !!(window.CSS && window.CSS.supports && window.CSS.supports("font-weight", "var(--tmp-var)")), t.parentNode.removeChild(t), e }; supportsCssVars() || alert("Please view this demo in a modern browser that supports CSS Variables.");</script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display&family=Roboto:wght@300&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://use.typekit.net/crf4rue.css">
+    <link rel="stylesheet" type="text/css" href="/Content-UI/css/base.css" />
+
+    <meta name="viewport" content="width=device-width" />
+
+    <link rel="stylesheet" type="text/css" href="/Content-UI/css/index.css" />
+    <link rel="stylesheet" type="text/css" href="/Content-UI/css/index2.css" />
+    <link rel="stylesheet" type="text/css" href="/Content-UI/css/registerlogin.css" />
+</head>
+<body>
+
+    <header>
+        @if (TempData["SuccessLayout"] != null)
+        {
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                <strong>Başarılı!</strong> @TempData["SuccessLayout"]
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        }
+        @if (TempData["ErrorLayout"] != null)
+        {
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                <strong>Hata!</strong> @TempData["ErrorLayout"]
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        }
+        @if (clientid == 0)
+        {
+            <div class="frame">
+                <div class="frame__links">
+                    <a href="#page-contain">Kayıt Ol</a>
+                    <a href="#page-contain">Giriş Yap</a>
+                    <a href="/Home/AboutUs">hakkımızda</a>
+                    <a href="/Home/Offices">ofislerimiz</a>
+                    <a href="/Home/Support">destek</a>
+                </div>
+            </div>
+        }
+        else
+        {
+            <div class="frame">
+                <div class="frame__links">
+                    <a href="/Product/BuyAndRent">satın al & kirala</a>
+                    <a href="/Product/Cart">sepet</a>
+                    <a href="/Home/Client">profilim</a>
+                    <a href="/Home/AboutUs">hakkımızda</a>
+                    <a href="/Home/Offices">ofislerimiz</a>
+                    <a href="/Home/Support">destek</a>
+                </div>
+            </div>
+        }
+        <div class="page page--preview">
+            <div class="grid-wrap">
+                <div class="grid grid--layout-1">
+                    <div class="grid__item-wrap"><div class="grid__item" style="background-image: url(/Content-UI/img/1.jpg)"></div></div>
+                    <div class="grid__item-wrap"><div class="grid__item" style="background-image: url(/Content-UI/img/2.jpg)"></div></div>
+                    <div class="grid__item-wrap"><div class="grid__item" style="background-image: url(/Content-UI/img/3.jpg)"></div></div>
+                    <div class="grid__item-wrap"><div class="grid__item" style="background-image: url(/Content-UI/img/4.jpg)"></div></div>
+                    <div class="grid__item-wrap"><div class="grid__item" style="background-image: url(/Content-UI/img/5.jpg)"></div></div>
+                    <div class="grid__item-wrap"><div class="grid__item" style="background-image: url(/Content-UI/img/6.jpg)"></div></div>
+
+                </div>
+                <div class="grid grid--layout-2">
+                    <div class="grid__item-wrap"><div class="grid__item" style="background-image: url(/Content-UI/img/7.jpg)"></div></div>
+                    <div class="grid__item-wrap"><div class="grid__item" style="background-image: url(/Content-UI/img/8.jpg)"></div></div>
+                    <div class="grid__item-wrap"><div class="grid__item" style="background-image: url(/Content-UI/img/9.jpg)"></div></div>
+                    <div class="grid__item-wrap"><div class="grid__item" style="background-image: url(/Content-UI/img/10.jpg)"></div></div>
+                    <div class="grid__item-wrap"><div class="grid__item" style="background-image: url(/Content-UI/img/11.jpg)"></div></div>
+                    <div class="grid__item-wrap"><div class="grid__item" style="background-image: url(/Content-UI/img/12.jpg)"></div></div>
+
+                </div>
+                <div class="grid grid--layout-3">
+                    <div class="grid__item-wrap"><div class="grid__item" style="background-image: url(/Content-UI/img/13.jpg)"></div></div>
+                    <div class="grid__item-wrap"><div class="grid__item" style="background-image: url(/Content-UI/img/14.jpg)"></div></div>
+                    <div class="grid__item-wrap"><div class="grid__item" style="background-image: url(/Content-UI/img/15.jpg)"></div></div>
+                    <div class="grid__item-wrap"><div class="grid__item" style="background-image: url(/Content-UI/img/16.jpg)"></div></div>
+                    <div class="grid__item-wrap"><div class="grid__item" style="background-image: url(/Content-UI/img/17.jpg)"></div></div>
+                    <div class="grid__item-wrap"><div class="grid__item" style="background-image: url(/Content-UI/img/18.jpg)"></div></div>
+
+                </div>
+                <div class="grid grid--layout-4">
+                    <div class="grid__item-wrap"><div class="grid__item" style="background-image: url(/Content-UI/img/19.jpg)"></div></div>
+                    <div class="grid__item-wrap"><div class="grid__item" style="background-image: url(/Content-UI/img/20.jpg)"></div></div>
+                    <div class="grid__item-wrap"><div class="grid__item" style="background-image: url(/Content-UI/img/21.jpg)"></div></div>
+                    <div class="grid__item-wrap"><div class="grid__item" style="background-image: url(/Content-UI/img/22.jpg)"></div></div>
+                    <div class="grid__item-wrap"><div class="grid__item" style="background-image: url(/Content-UI/img/23.jpg)"></div></div>
+                    <div class="grid__item-wrap"><div class="grid__item" style="background-image: url(/Content-UI/img/24.jpg)"></div></div>
+                </div>
+                <div class="grid grid--layout-5">
+                    <div class="grid__item-wrap"><div class="grid__item" style="background-image: url(/Content-UI/img/25.jpg)"></div></div>
+                    <div class="grid__item-wrap"><div class="grid__item" style="background-image: url(/Content-UI/img/26.jpg)"></div></div>
+                    <div class="grid__item-wrap"><div class="grid__item" style="background-image: url(/Content-UI/img/27.jpg)"></div></div>
+                    <div class="grid__item-wrap"><div class="grid__item" style="background-image: url(/Content-UI/img/28.jpg)"></div></div>
+                    <div class="grid__item-wrap"><div class="grid__item" style="background-image: url(/Content-UI/img/30.jpg)"></div></div>
+                </div>
+                <button class="gridback"><svg width="27px" height="15px" viewBox="0 0 27 15"><path d="M1.469 6.75l-.719.719 7.938 6.937.718-.719L1.47 6.75zM8.594.531L.75 7.375l.688.688L9.28 1.218 8.594.53zM1.406 6.938v1h24.75v-1H1.406z" fill="#de6565" /></svg></button>
+            </div><!-- /grid-wrap -->
+        </div><!-- /page -->
+        <div class="menu-wrap">
+            <div class="menu-draggable"></div>
+            <nav class="menu">
+                <div class="menu__item">
+                    <a class="menu__item-link">Audi</a>
+                    <a class="menu__item-explore">gezin</a>
+                </div>
+                <div class="menu__item">
+                    <a class="menu__item-link">BMW</a>
+                    <a class="menu__item-explore">gezin</a>
+                </div>
+                <div class="menu__item">
+                    <a class="menu__item-link">Hydrolift</a>
+                    <a class="menu__item-explore">gezin</a>
+                </div>
+                <div class="menu__item">
+                    <a class="menu__item-link">Harley</a>
+                    <a class="menu__item-explore">gezin</a>
+                </div>
+                <div class="menu__item">
+                    <a class="menu__item-link">Boeing</a>
+                    <a class="menu__item-explore">gezin</a>
+                </div>
+            </nav><!--menu-->
+        </div><!--/menu-wrap-->
+    </header>
+
+    <main>
+        <section id="page-contain" class="page-contain">
+            <a href="#" class="data-card">
+                <h3>1347</h3>
+                <h4>Model</h4>
+                <p>Araba, motorsiklet, tekne, yat, uçak ve daha fazlası.</p>
+                <span class="link-text">
+                    Tüm modelleri gör
+                    <svg width="25" height="16" viewBox="0 0 25 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path fill-rule="evenodd" clip-rule="evenodd" d="M17.8631 0.929124L24.2271 7.29308C24.6176 7.68361 24.6176 8.31677 24.2271 8.7073L17.8631 15.0713C17.4726 15.4618 16.8394 15.4618 16.4489 15.0713C16.0584 14.6807 16.0584 14.0476 16.4489 13.657L21.1058 9.00019H0.47998V7.00019H21.1058L16.4489 2.34334C16.0584 1.95281 16.0584 1.31965 16.4489 0.929124C16.8394 0.538599 17.4726 0.538599 17.8631 0.929124Z" fill="#753BBD" />
+                    </svg>
+                </span>
+            </a>
+            <a href="#" class="data-card">
+                <h3>15322</h3>
+                <h4>Çalışan</h4>
+                <p>Hepsi size daha iyi hizmet verebilmek için.</p>
+                <span class="link-text">
+                    Ekibi gör
+                    <svg width="25" height="16" viewBox="0 0 25 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path fill-rule="evenodd" clip-rule="evenodd" d="M17.8631 0.929124L24.2271 7.29308C24.6176 7.68361 24.6176 8.31677 24.2271 8.7073L17.8631 15.0713C17.4726 15.4618 16.8394 15.4618 16.4489 15.0713C16.0584 14.6807 16.0584 14.0476 16.4489 13.657L21.1058 9.00019H0.47998V7.00019H21.1058L16.4489 2.34334C16.0584 1.95281 16.0584 1.31965 16.4489 0.929124C16.8394 0.538599 17.4726 0.538599 17.8631 0.929124Z" fill="#753BBD" />
+                    </svg>
+                </span>
+            </a>
+            <br>
+            <a href="#" class="data-card">
+                <h3>150000</h3>
+                <h4>'den fazla müşteri</h4>
+                <p>Hepsi memnun kaldı.</p>
+                <span class="link-text">
+                    İncelemeleri oku
+                    <svg width="25" height="16" viewBox="0 0 25 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path fill-rule="evenodd" clip-rule="evenodd" d="M17.8631 0.929124L24.2271 7.29308C24.6176 7.68361 24.6176 8.31677 24.2271 8.7073L17.8631 15.0713C17.4726 15.4618 16.8394 15.4618 16.4489 15.0713C16.0584 14.6807 16.0584 14.0476 16.4489 13.657L21.1058 9.00019H0.47998V7.00019H21.1058L16.4489 2.34334C16.0584 1.95281 16.0584 1.31965 16.4489 0.929124C16.8394 0.538599 17.4726 0.538599 17.8631 0.929124Z" fill="#753BBD" />
+                    </svg>
+                </span>
+            </a>
+            <a href="#" class="data-card">
+                <h3>%100</h3>
+                <h4>Müşteri memnuniyeti</h4>
+                <p>Her şey dahil</p>
+
+            </a>
+            @if (clientid == 0)
+            {
+                <div style="margin:auto" class="form-structor">
+                    <div id="registerdiv" class="signup">
+                        @using (Html.BeginForm("Register", "Home", FormMethod.Post))
+                        {
+                            <h2 class="form-title" id="signup"><span>or</span>Kayıt ol</h2>
+                            <div class="form-holder">
+
+                                @Html.TextBoxFor(m => m.client_email, new { @class = "input", @placeholder = "E-mail", @type = "email" })
+
+                                @Html.PasswordFor(m => m.client_password, new { @class = "input", @placeholder = "Şifre" })
+                                <input class="input" placeholder="Şifre tekrar" type="password" name="passwordcheck">
+                            </div>
+                            <button class="submit-btn">Kayıt ol</button>
+                        }
+                    </div>
+                    @using (Html.BeginForm("Login", "Home", FormMethod.Post))
+                    {
+                        <div id="logindiv" class="login slide-up">
+                            <div class="center">
+
+                                <h2 class="form-title" id="login"><span>or</span>Giriş yap</h2>
+                                <div class="form-holder">
+
+                                    @Html.TextBoxFor(m => m.client_email, new { @class = "input" ,@placeholder = "E-mail", @type = "email"})
+
+
+                                    @Html.PasswordFor(m => m.client_password, new { @class = "input" , @placeholder = "Şifre" })
+
+                                </div>
+                                <button class="submit-btn">Giriş yap</button>
+
+                            </div>
+                        </div>
+                    }
+                </div>
+            }
+
+        </section>
+        <section class="page-contain">
+            <div style="margin:auto" class="container">
+                <video autoplay loop muted>
+                    <source src="https://www.bmw.com/video/is/content/BMW/bmwcom/bmw_com/category/performance/city-and-me/cam-00-teaser-square.mp4" type="video/mp4" />
+                </video>
+            </div>
+            <div style="margin:auto" class="container">
+                <video autoplay loop muted>
+                    <source src="https://www.bmw.com/video/is/content/BMW/bmwcom/bmw_com/category/innovation/controlling/int-00-teaser-square.mp4" type="video/mp4" />
+                </video>
+            </div>
+        </section>
+
+    </main>
+
+    <footer>
+    </footer>
+    <div class="cursor">
+        <div class="cursor__inner cursor__inner--circle">
+            <div class="cursor__side cursor__side--left"></div>
+            <div class="cursor__side cursor__side--right"></div>
+        </div>
+    </div>
+</body>
+
+</html>
+<script src="/Content-UI/js/imagesloaded.pkgd.min.js"></script>
+<script src="/Content-UI/js/charming.min.js"></script>
+<script src="/Content-UI/js/TweenMax.min.js"></script>
+<script src="/Content-UI/js/draggabilly.pkgd.min.js"></script>
+<script src="/Content-UI/js/demo.js"></script>
+
+
+
+
+
+
+
+<script>
+    const loginBtn = document.getElementById('login');
+    const signupBtn = document.getElementById('signup');
+
+    loginBtn.addEventListener('click', (e) => {
+        let parent = e.target.parentNode.parentNode;
+        Array.from(e.target.parentNode.parentNode.classList).find((element) => {
+            if (element !== "slide-up") {
+                parent.classList.add('slide-up')
+            } else {
+                signupBtn.parentNode.classList.add('slide-up')
+                parent.classList.remove('slide-up')
+            }
+        });
+    });
+
+    signupBtn.addEventListener('click', (e) => {
+        let parent = e.target.parentNode;
+        Array.from(e.target.parentNode.classList).find((element) => {
+            if (element !== "slide-up") {
+                parent.classList.add('slide-up')
+            } else {
+                loginBtn.parentNode.parentNode.classList.add('slide-up')
+                parent.classList.remove('slide-up')
+            }
+        });
+    });
+
+
+</script>

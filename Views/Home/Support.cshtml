@@ -1,0 +1,26 @@
+﻿
+@{
+    ViewBag.Title = "Support";
+    Layout = "~/Views/_Layout.cshtml";
+}
+<head>
+    <link href="~/Content-UI/css/contact.css" rel="stylesheet" />
+</head>
+<form id="scrollHere" action="/Home/Support" method="post" class="form-contact">
+    <h2>BİZE ULAŞIN</h2>
+    <p type="İsim:"><input name="name" placeholder="İsminiz"></input></p>
+    <p type="E-posta:"><input name="email" placeholder="E-posta adresiniz"></input></p>
+    <p type="Mesaj:"><input name="message" placeholder="Mesajınız"></input></p>
+    <button type="submit" value="submit" id="button-contact">Mesaj Gönder</button>
+    <div class="telefon">
+        <span id="span-form" class="fa fa-phone"></span>555 55 55
+        <span id="span-form" class="fa fa-envelope-o"></span>okanaltun@aliniyor.com
+    </div>
+</form>
+<script>
+    var elem = $('#scrollHere');
+    if (elem) {
+        $('html').scrollTop(elem.offset().top);
+        $('html').scrollLeft(elem.offset().left);
+    }
+</script>
